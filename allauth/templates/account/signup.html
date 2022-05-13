@@ -1,0 +1,55 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+    <!--START SIGN UP-->
+    <div class="loginContainer d-flex direction-column"
+         style="margin-top: 0; margin-bottom: 0; background-color: rgba(0, 0, 0, 0.8)">
+        <h2 class="formtitle">
+            {% trans 'Sign up' %}
+        </h2>
+        <form id="loginForm" class="d-flex direction-column" method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            <input type="text" name="email" id="email" class="email" placeholder="{% trans 'Email' %}">
+            <div style="color: #E87C03; font-size: 14px;">
+                <p>{{ form.email.errors|escape }}</p>
+            </div>
+            <input type="text" name="username" id="username" class="username" placeholder="{% trans 'Username' %}">
+            <div style="color: #E87C03; font-size: 14px;">
+                <p>{{ form.username.errors|escape }}</p>
+            </div>
+            <input type="password" name="password1" id="password1" placeholder="{% trans 'Password' %}">
+            <div style="color: #E87C03; font-size: 14px;">
+                <p>{{ form.password1.errors|escape }}</p>
+            </div>
+
+            <input type="password" name="password2" id="password2" placeholder="{% trans 'Password again' %}">
+            <div style="color: #E87C03; font-size: 14px;">
+                <p>{{ form.password1.errors|escape }}</p>
+            </div>
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}"/>
+            {% endif %}
+            <div class="rememberMe">
+                <input type="checkbox" name="rememberMe" id="rememberMe" class="rememberMe">
+                <label for="rememberMe" name="remember">
+                        <span class="login-remember-me-label-text" style="color: #b3b3b3; font-size: 13px;
+                            font-weight: 500">{% trans 'Remember me' %}
+                        </span>
+                </label>
+            </div>
+
+            <button type="submit" class="button submitButton" id="signInButton">
+                {% trans 'Sign in ' %}
+            </button>
+            <p class="signUpText para">
+                {% trans 'Already have an account?' %} <span class="signUp"><a href={{ login_url }}>{% trans 'Log in' %}</a></span>
+            </p>
+        </form>
+    </div>
+    <!--END OF SIGN UP-->
+{% endblock %}

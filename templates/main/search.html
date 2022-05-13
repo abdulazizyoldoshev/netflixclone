@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load mylist %}
+{% block content %}
+    <style>
+        input[type=text] {
+            width: 130px;
+            box-sizing: border-box;
+            border: 1px solid white;
+            color: white;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: rgb(14, 14, 14);
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+        }
+
+        input[type=text]:focus {
+            width: 100%;
+        }
+    </style>
+    <!--paretn div with black bg after main hero section-->
+    <div class="searchform d-flex flex-center flex-middle" style="padding-top: 150px;">
+        <form>
+            <label>
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="{% trans 'Search..' %}"
+                       autocomplete="off">
+            </label>
+        </form>
+    </div>
+    <!--continue watching-->
+    <div class="searchresult">
+        {% if object_list %}
+            {% for movie in object_list %}
+                <section id="continue-watching" class="container p-t-40">
+                    <h4 class="continue-watching-heading">
+                        {{ movie.category.category_name }}
+                    </h4>
+                    <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+                        <div class="video">
+                            <a href="{% url 'movie:detail' pk=movie.pk %}" style="color: white">
+                                <video class="mylist-img p-r-10 p-t-10 video-item"
+                                       poster="{{ movie.poster_img.url }}">
+                                    <source
+                                            src="{{ movie.film.url }}"
+                                            type="video/mp4">
+                                    {% trans 'Your browser does not support the video tag.' %}
+                                </video>
+                                <div class="video-description d-flex flex-end direction-column">
+                                    <div class="play-button d-flex" style="margin-bottom: 10px;">
+                                        <svg viewBox="0 0 24 24" class="d-flex">
+                                            <path d="M6 4l15 8-15 8z" fill="black"></path>
+                                        </svg>
+                                        <div>
+                                            {% if movie|is_added:request.user %}
+                                                <a href="{% url 'movie:add_mylist' movie.pk %}?next={{ request.path }}">
+                                                    <button type="button" class="plusminus" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                        -
+                                                    </button>
+                                                </a>
+                                            {% else %}
+                                                <a href="{% url 'movie:add_mylist' movie.pk %}?next={{ request.path }}">
+                                                    <button type="button" class="plusminus" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                        +
+                                                    </button>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="heading f-w-8 text-shadow" style="font-size: 14px">
+                                            {{ movie.name }}
+                                        </h4>
+                                    </div>
+                                    <div class="info d-flex flex-middle flex-no-wrap">
+                                        <p class="rated text-shadow"><strong>18+</strong></p>
+                                        <p class="season-count text-shadow">{{ movie.category.category_name }}</p>
+                                    </div>
+                                    <div class="genere d-flex flex-no-wrap text-shadow">
+                                        {% for tag in movie.tag.all %}
+                                            <p>#{{ tag.name }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            {% endfor %}
+        {% else %}
+            <h3 style="text-align: center">{% trans 'Not Found' %}
+                ('<span style="color: #e50914; font-size: 22px">{{ request.GET.q }}</span>')
+            </h3>
+        {% endif %}
+    </div>
+{% endblock %}
+
+

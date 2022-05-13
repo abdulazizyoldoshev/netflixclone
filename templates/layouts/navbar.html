@@ -1,0 +1,84 @@
+{% load static %}
+{% load i18n %}
+
+<!-- Header Section Begin -->
+<style>
+    .active{
+        color: white;
+    }
+    a{
+        color: #b3b3b3;
+    }
+</style>
+<header class="d-flex space-between flex-center flex-middle">
+    <div class="nav-links d-flex flex-center flex-middle">
+        <a href="{% url 'movies:browse' %}">
+            <h2 class="logo logo-text red-color f-s-28 m-r-25">NETFLIX</h2>
+            <h2 class="second-logo-text red-color f-s-28">N</h2>
+        </a>
+        <nav class="nav-color-text">
+            <ul>
+                {% url 'movie:browse' as current_path %}
+                <a href="{% url 'movie:browse' %}" style="padding: 0 15px"
+                        {% if request.path == current_path %} class="active home"{% endif %}>
+                    {% trans "Home" %}
+                </a>
+                {% url 'movie:tv-shows' as current_path %}
+                <a href="{% url "movie:tv-shows" %}" style="padding: 0 15px;"
+                   {% if request.path == current_path %}class="active"{% endif %}>
+                    {% trans "TV Show" %}
+                </a>
+                {% url 'movie:movies' as current_path %}
+                <a href="{% url "movie:movies" %}" style="padding: 0 15px;"
+                   {% if request.path == current_path %}class="active"{% endif %}>
+                    {% trans "Movies" %}
+                </a>
+                {% url 'movie:latest' as current_path %}
+                <a href="{% url "movie:latest" %}" style="padding: 0 15px;"
+                   {% if request.path == current_path %}class="active latest"{% endif %}>
+                    {% trans "Latest" %}
+                </a>
+                {% url 'movie:mylist' as current_path %}
+                <a href="{% url 'movie:mylist' %}" style="padding: 0 15px;"
+                   {% if request.path == current_path %}class="active"{% endif %}>
+                    {% trans "My List" %}
+                </a>
+            </ul>
+        </nav>
+    </div>
+    <div class="righticons d-flex flex-end flex-middle">
+        <a href="{% url 'movie:search' %}">
+            <img src="{% static 'images/icons/search.svg' %}" alt="search icon">
+        </a>
+        <div class="dropdown notification">
+            {% get_current_language as current %}
+            <span style="padding-right: 20px">{{ current }}</span>
+            <div class="dropdown-content" style="">
+                <ul class="d-flex">
+                    {% get_available_languages as languages %}
+                    {% for lan in languages %}
+                        {% if lan.0 != current %}
+                            <li class="d-flex">
+                                <a href="/{{ lan.0 }}/{{ request.path|slice:'4:' }}"
+                                   style="font-size: 20px">{{ lan.1 }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown">
+            <img src="{% static 'images/icons/usericon.jpeg' %}" style="border-radius: 4px" alt="user profile icon"
+                 class="user-icon"> <span class="profile-arrow"></span>
+
+            <div class="dropdown-content">
+                <div class="links d-flex direction-column">
+                    <a href="{% url 'movie:account' %}">{% trans 'Account' %}</a>
+                    <a href="https://help.netflix.com/en/">{% trans 'Help Center' %}</a>
+                    <a href="{% url 'account_logout' %}">{% trans 'Sign Out of Netflix' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->

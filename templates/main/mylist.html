@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+    {% load mylist %}
+    <!--my list -->
+
+
+    <section id="continue-watching" class="container p-t-40">
+        <h4 class="continue-watching-heading">
+            {{ category.category.category_name }}
+        </h4>
+        <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+            {% for movies in mov %}
+                <div class="video">
+                    <a href="{% url 'movie:detail' pk=movies.pk %}" style="color: white">
+                        <video class="mylist-img p-r-10 p-t-10 video-item"
+                               poster="{{ movies.poster_img.url }}">
+                            <source src="{{ movies.film.url }}" type="video/mp4">
+                            {% trans 'Your browser does not support the video tag.' %}
+                        </video>
+                        <div class="video-description d-flex flex-end direction-column">
+                            <div class="play-button d-flex" style="margin-bottom: 10px">
+                                <svg viewBox="0 0 24 24" class="d-flex">
+                                    <path d="M6 4l15 8-15 8z" fill="black"></path>
+                                </svg>
+                                <div>
+                                    {% if movies|is_added:request.user %}
+                                        <a href="{% url 'movie:add_mylist' movies.pk %}?next={{ request.path }}">
+                                            <button type="button" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                -
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'movie:add_mylist' movies.pk %}?next={{ request.path }}">
+                                            <button type="button" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                +
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="heading f-w-8 text-shadow" style="font-size: 14px">
+                                    {{ movies.name }}
+                                </h4>
+                            </div>
+                            <div class="info d-flex flex-middle flex-no-wrap">
+                                <p class="rated text-shadow"><strong>18+</strong></p>
+                                <p class="season-count text-shadow">{{ movies.category.category_name }}</p>
+                            </div>
+                            <div class="genere d-flex flex-no-wrap text-shadow">
+                                {% for tag in movies.tag.all %}
+                                    <p>#{{ tag.name }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

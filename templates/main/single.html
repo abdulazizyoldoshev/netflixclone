@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+    {% load mylist %}
+    <!-- hero section video-->
+    <div class="videocontainer">
+        {% get_current_language as current %}
+        {% url 'movie:browse' as current_path %}
+        {% url 'movie:tv-shows' as current_path %}
+        {% url 'movie:movies' as current_path %}
+        {% url 'movie:latest' as current_path %}
+        {% url 'movie:mylist' as current_path %}
+        {% if current_path == request.path %}
+            <a href="{{ request.META.HTTP_REFERER }}">
+                <img src="{% static 'images/icons/back.png' %}"
+                     style="color:#ffffff; cursor: pointer; width: 55px; height: 40px" alt="back left icon">
+            </a>
+        {% else %}
+            <a href="{{ request.META.HTTP_REFERER|slice:':22'}}{{ current }}">
+                <img src="{% static 'images/icons/back.png' %}"
+                     style="color:#ffffff; cursor: pointer; width: 55px; height: 40px" alt="back left icon">
+            </a>
+        {% endif %}
+
+
+        <video controls crossorigin playsinline
+               poster="{{ object.poster_img.url }}" id="player">
+            <!-- Video files -->
+
+            <source src="{{ object.film.url }}" type="video/mp4">
+
+            <!-- Caption files -->
+            <track kind="captions" label="English" srclang="en"
+                   src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" default>
+        </video>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // This is the bare minimum JavaScript. You can opt to pass no arguments to setup.
+            // Expose
+            window.player = new Plyr('#player');
+
+            // Bind event listener
+            function on(selector, type, callback) {
+                document.querySelector(selector).addEventListener(type, callback, false);
+            }
+        });
+    </script>
+
+
+    <section class="movieinformation container">
+        <div class="movielogo">
+            <img style="width: 300px; margin-top: 20px" src="{{ object.logo_img.url }}" alt="">
+        </div>
+
+        <div class="movierelease">
+                <span class="year">
+                    {{ object.created_at.year }}
+                </span>
+            <span class="rating">
+                    {{ object.ratingMovie }}
+                </span>
+            <span class="timeduration">
+                    {{ object.duration }}
+                </span>
+            <div class="actions d-flex flex-start flex-middle">
+                {% if object|is_added:request.user %}
+                    <a href="{% url 'movie:add_mylist' object.pk %}?next={{ request.path }}" class="link-item">
+                        <i class="fa fa-minus"></i></br>
+                        {% trans 'Remove' %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'movie:add_mylist' object.pk %}?next={{ request.path }}" class="link-item">
+                        <i class="fa fa-plus"></i></br>
+                        {% trans 'My List' %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="description" style="width: 1300px">
+            {{ object.detailed_description }}
+        </div>
+        <div class="castinformation">
+            <p>
+                <span class="name">{% trans 'Director:' %}&nbsp;</span>
+                {% for d in object.director.all %}
+                    <i>{{ d.name }} &nbsp;</i>
+                {% endfor %}
+            </p>
+            <p>
+                <span class="name">{% trans 'Screenplay:' %}&nbsp;</span>
+                {% for s in object.screenplay.all %}
+                    <i>{{ s.name }} &nbsp;</i>
+                {% endfor %}
+            </p>
+
+            <p>
+                <span class="name">{% trans 'Producers:' %}&nbsp;</span>
+                {% for p in object.producer.all %}
+                    <i>{{ p.name }} &nbsp;</i>
+                {% endfor %}
+            </p>
+            <p>
+                <span class="name">{% trans 'Awards:' %}&nbsp;</span>
+                {% for a in object.award.all %}
+                    <i>{{ a.name }}</i>
+                {% endfor %}
+            </p>
+        </div>
+    </section>
+
+    <!-- More Like This -->
+    {% for like in related.all %}
+        <section id="continue-watching" class="container p-t-40">
+            <h4 class="continue-watching-heading">
+                {{ like.category.category_name }}
+            </h4>
+            <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+                <div class="video">
+                    <a href="{% url 'movie:detail' pk=like.pk %}">
+                        <video class="mylist-img p-r-10 p-t-10 video-item" poster="{{ like.poster_img.url }}">
+                            <source src="{{ like.film.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-description d-flex flex-end direction-column">
+                            <div class="play-button d-flex" style="margin-bottom: 10px">
+                                <svg viewBox="0 0 24 24" class="d-flex">
+                                    <path d="M6 4l15 8-15 8z" fill="black"></path>
+                                </svg>
+                                <div>
+                                    {% if like|is_added:request.user %}
+                                        <a href="{% url 'movie:add_mylist' like.pk %}?next={{ request.path }}">
+                                            <button type="button" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                -
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'movie:add_mylist' like.pk %}?next={{ request.path }}">
+                                            <button type="button" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                +
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="heading f-w-8 text-shadow" style="font-size: 14px">
+                                    {{ like.name }}
+                                </h4>
+                            </div>
+                            <div class="info d-flex flex-middle flex-no-wrap">
+                                <p class="rated text-shadow"><strong>18+</strong></p>
+                                <p class="season-count text-shadow">{{ like.category.category_name }}</p>
+                            </div>
+                            <div class="genere d-flex flex-no-wrap text-shadow">
+                                {% for tag in like.tag.all %}
+                                    <p>#{{ tag.name }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+{% endblock %}

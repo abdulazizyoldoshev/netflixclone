@@ -1,0 +1,105 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
+
+
+{% block content %}
+    <section id="login-form-section">
+        <!--Login form start-->
+        <div class="loginContainer d-flex direction-column"
+             style="margin-bottom: 0; background-color: rgba(0, 0, 0, 0.8)">
+            <h2 class="formtitle">
+                {% trans 'Log In' %}
+            </h2>
+            <form id="loginForm" class="d-flex direction-column" name='q' method="post">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}"
+                           value="{{ redirect_field_value }}"/>
+                {% endif %}
+                <input type="text" name="login" autocomplete="email" id="email" class="email"
+                       placeholder="{% trans 'Email' %}">
+                <div style="color: #E87C03; font-size: 14px;">
+                    <p>{{ form.login.errors|escape }}</p>
+                    <p>{{ form.login.non_field_errors|escape }}</p>
+                    <p>{{ form.non_field_errors|escape }}</p>
+                </div>
+                <input type="password" autocomplete="current-password" id name="password" placeholder="{% trans 'Password' %}">
+                <div style="color: #E87C03; font-size: 14px;">
+                    <p>{{ form.password.errors|escape }}</p>
+                    <p>{{ form.password.non_field_errors|escape }}</p>
+                </div>
+
+                <div class="rememberMe" style="color: #b3b3b3">
+                    <input type="checkbox" name="remember" id="rememberMe" class="rememberMe">
+                    <label for="rememberMe" name="remember">
+                        <span class="login-remember-me-label-text" style="color: #b3b3b3; font-size: 13px;
+                            font-weight: 500">{% trans 'Remember me' %}
+                        </span>
+                    </label>
+                    <a style="padding-top: 5px; text-align: right; padding-left: 125px; font-size: 13px;
+                        font-weight: 500; color: #b3b3b3" class="secondaryAction"
+                       href="{% url 'account_reset_password' %}">
+                        {% trans "Forgot Password?" %}
+                    </a>
+                </div>
+                <button type="submit" class="button submitButton" id="signInButton">
+                    {% trans 'Log in' %}
+                </button>
+
+                <div class="socialaccount_ballot">
+                    <a class="socialaccount_providers">
+                        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                    </a>
+                </div>
+
+                <p class="signUpText para">
+                    {% blocktrans %}New to Netflix?{% endblocktrans %}
+                    <span class="signUp">
+                        <a href={{ signup_url }}>
+                            {% trans "Sign up Now" %}
+                        </a>
+                    </span>
+                </p>
+                <div style="margin-top: 11px">
+                    <p style="font-size: 13px; color: grey">
+                        <span style="font-size: 13px; color: grey">
+                            {% trans "This page is protected by Google reCAPTCHA to ensure you're not a bot." %}
+                            <button onclick="ShowHide('more')" style="background-color: transparent; border: none;
+                                color: #0071eb; cursor: pointer; display: inline;
+                                font-family: inherit; font-size: inherit; padding: 0; margin: 0">
+                            {% trans "Learn more" %}
+                            </button>
+                        </span>
+                    </p>
+                    <div id="more" style="display: none; font-size: 13px; color: grey">
+                        {% trans "The information collected by Google reCAPTCHA is subject to the Google" %}
+                        <a href="https://policies.google.com/privacy"
+                           style="text-decoration: none; color: #0080ff;">
+                            {% trans "Privacy Policy" %}
+                        </a> and
+                        <a href="https://policies.google.com/privacy"
+                           style="text-decoration: none; color: #0080ff;">
+                            {% trans "Terms of Service" %}
+                        </a>{% trans ", and is used for providing, maintaining, and improving the reCAPTCHA service and for general security purposes (it is not usedfor personalized advertising by Google)." %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!--Login form End-->
+
+    <script>
+        function ShowHide(more) {
+            if (document.getElementById(more).style.display === 'none') {
+                document.getElementById(more).style.display = 'block';
+            } else {
+                document.getElementById(more).style.display = 'none';
+            }
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% load static %}
+{% load i18n %}
+<!-- Footer Section Begin -->
+<footer class="mainfooter d-flex direction-column space-between" id=" footer">
+    <div class="container footer-container flex-start">
+        <div class="widgets d-flex space-between">
+            <div class="first-widget">
+                <ul>
+                    <li class="list-item">{% trans 'Audio and Subtitles' %}</li>
+                    <li class="list-item">{% trans 'Media Center' %}</li>
+                    <li class="list-item">{% trans 'Privacy' %}</li>
+                    <li class="list-item">{% trans 'Contact us' %}</li>
+                </ul>
+            </div>
+            <div class="second-widget">
+                <ul>
+                    <li class="list-item">{% trans 'Help Center' %}</li>
+                    <li class="list-item">{% trans 'Cookie' %}</li>
+                    <li class="list-item">{% trans 'Jobs' %}</li>
+                </ul>
+            </div>
+            <div class="third-widget">
+                <ul>
+                    <li class="list-item">{% trans 'Audio Description' %}</li>
+                    <li class="list-item">{% trans 'Investor Relations' %}</li>
+                    <li class="list-item">{% trans 'Legal Notice' %}</li>
+                </ul>
+            </div>
+            <div class="forth-widget">
+                <ul>
+                    <li class="list-item">{% trans 'Gift Card' %}</li>
+                    <li class="list-item">{% trans 'Term Of Use' %}</li>
+                    <li class="list-item">{% trans 'Corporate Information' %}</li>
+                </ul>
+            </div>
+        </div>
+        <button class="button service">{% trans 'Service Code' %}</button>
+        <p class="copyright">{% trans 'Netflixclone 2022. All rights reserved.' %}</p>
+    </div>
+</footer>
+<!-- Footer Section End -->

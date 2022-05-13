@@ -1,0 +1,31 @@
+{% load i18n %}
+{% load static %}
+{% load socialaccount %}
+
+
+
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+    {% if provider.id == "openid" %}
+        {% for brand in provider.get_brands %}
+            <li>
+                <a title="{{ brand.name }}"
+                   class="socialaccount_provider {{ provider.id }} {{ brand.id }}"
+                   href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
+                >{{ brand.name }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+    <div style="margin-top: 30px">
+        <a title="{{ provider.name }}"
+           href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+            <img src="{% static 'images/icons/google_icon.png' %}" alt="google icon"
+             style="height: 25px; width: 25px; position: relative; display: inline-block">
+            <span style="color: grey; position: absolute; padding-left: 5px">
+                {% trans 'Login with' %} <b>{{ provider.name }}</b>
+            </span>
+
+        </a>
+    </div>
+{% endfor %}

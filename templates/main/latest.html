@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load mylist %}
+
+{% block content %}
+    <!--paretn div with black bg after main hero section-->
+    <div class="black-background" style="margin-top: 0">
+
+        <section id="continue-watching" class="container p-t-40">
+            <h4 class="continue-watching-heading">
+                {#                {{ newbie.category.category_name }}{{ latest }}#}
+            </h4>
+            <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+                {% for new in latest %}
+                    <div class="video">
+                        <a href="{% url 'movie:detail' pk=new.pk %}" style="color: white">
+                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                                   poster="{{ new.poster_img.url }}">
+                                <source src="{{ new.film.url }}" type="video/mp4">
+                                {% trans 'Your browser does not support the video tag.' %}
+                            </video>
+                            <div class="video-description d-flex flex-end direction-column">
+                                <div class="play-button d-flex" style="margin-bottom: 10px">
+                                    <svg viewBox="0 0 24 24" class="d-flex">
+                                        <path d="M6 4l15 8-15 8z" fill="black"></path>
+                                    </svg>
+                                    <div>
+                                        {% if new|is_added:request.user %}
+                                            <a href="{% url 'movie:add_mylist' new.pk %}?next={{ request.path }}">
+                                                <button type="button" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                    -
+                                                </button>
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'movie:add_mylist' new.pk %}?next={{ request.path }}">
+                                                <button type="button" style="background-color: white;
+                                            cursor: pointer; width: 36px;
+                                             height: 36px; border-radius: 50%;
+                                             border: none; text-align: center;
+                                             font-size: 22px; margin-left: 10px">
+                                                    +
+                                                </button>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="heading f-w-8 text-shadow" style="font-size: 14px">
+                                        {{ new.name }}
+                                    </h4>
+                                </div>
+                                <div class="info d-flex flex-middle flex-no-wrap">
+                                    <p class="rated text-shadow"><strong>18+</strong></p>
+                                    <p class="season-count text-shadow">{{ new.category.category_name }}</p>
+                                </div>
+                                <div class="genere d-flex flex-no-wrap text-shadow">
+                                    {% for tag in new.tag.all %}
+                                        <p>#{{ tag.name }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+{% endblock %}

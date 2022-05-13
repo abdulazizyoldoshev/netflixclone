@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Netflix world- Frontend Clone – Watch TV Shows Online, Watch Movies Online</title>
+    <meta name="description"
+          content="Video streaming website Netflix clone. Frontend - HTML5, Pure CSS3 [flexbox], JS, OWL Carousel, JQuery |"/>
+    <meta name="robots" content="index, follow"/>
+
+    <!-- og properties -->
+
+    <meta property="og:site_name" content="Rajesh Royal"/>
+    <meta property="article:publisher" content="https://www.facebook.com/Rajesh.royal.896/"/>
+
+    <meta property="og:image" content="{% static 'images/site-image-description.PNG' %}"/>
+
+    <!-- -->
+
+    <link rel="stylesheet" href="{% static 'lib/owl.carousel.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" integrity="sha256-t2kyTgkh+fZJYRET5l9Sjrrl4UDain5jxdbqe8ejO8A=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'css/global.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/browse.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/single.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css"/>
+    <script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
+
+
+    <script>
+
+    </script>
+</head>
+
+<body>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a>
+    to improve your experience.</p>
+<![endif]-->
+
+
+<!-- dashboard/browse page block start | home page after login | -->
+<main id="mainContainer" class="p-b-40">
+    <div>
+        {% include 'layouts/navbar.html' %}
+
+        {% block content %}
+
+        {% endblock %}
+
+        {% include 'layouts/footer.html' %}
+    </div>
+</main>
+<div class="footer-navigation d-flex space-between">
+    <a href="{% url 'movie:browse' %}" class="nav-item active">
+        <i class="fa fa-home" aria-hidden="true"></i> </br>
+        Home
+    </a>
+    <a href="{% url 'movie:search' %}" class="nav-item">
+        <i class="fa fa-search" aria-hidden="true"></i></br>
+        Search
+    </a>
+    <a href="{% url 'movie:latest' %}" class="nav-item">
+        <i class="fa fa-film" aria-hidden="true"></i></br>
+        Latest
+    </a>
+    <a href="{% url 'movie:account' %}" class="nav-item">
+        <i class="fa fa-user" aria-hidden="true"></i></br>
+        Account
+    </a>
+</div>
+
+
+<!--main script file-->
+<script src="{% static 'lib/jquery' %} 3.5.0.js"></script>
+<script src="{% static 'lib/owl.carousel.js' %}"></script>
+<script src="{% static 'js/main-script.js' %}"></script>
+
+
+</body>
+
+</html>
